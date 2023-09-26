@@ -5,20 +5,24 @@
         "https://github.com/nf-core/modules.git": {
             "modules": {
                 "nf-core": {
-                    "custom/dumpsoftwareversions": {
+                    "snpeff/download": {
                         "branch": "master",
-                        "git_sha": "911696ea0b62df80e900ef244d7867d177971f73",
-                        "installed_by": ["modules"]
-                    },
-                    "fastqc": {
+                        "git_sha": "4d584d5cf6ed5f7363a51cdb4b3eb25398e9e537",
+                        "installed_by": [
+                            "modules"
+                        ],
+                        "patch": "modules/nf-core/snpeff/download/snpeff-download.diff"
+                    }
+                }
+            },
+            "subworkflows": {
+                "nf-core": {
+                    "initialise": {
                         "branch": "master",
-                        "git_sha": "bd8092b67b5103bdd52e300f75889442275c3117",
-                        "installed_by": ["modules"]
-                    },
-                    "multiqc": {
-                        "branch": "master",
-                        "git_sha": "911696ea0b62df80e900ef244d7867d177971f73",
-                        "installed_by": ["modules"]
+                        "git_sha": "2a3d1b469385914c4eeca70f36bc378473049d93",
+                        "installed_by": [
+                            "subworkflows"
+                        ]
                     }
                 }
             }
