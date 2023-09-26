@@ -24,8 +24,8 @@ First, choose the genome you want to download the SnpEff cache for. You can find
 Alternatively, you can use the following params to specify the genome and build version:
 
 ```yml
-snpeff_db: '105'
-snpeff_genome: 'GRCh38'
+snpeff_db: "105"
+snpeff_genome: "GRCh38"
 ```
 
 Now, you can run the pipeline using:
