@@ -7,27 +7,18 @@
 ----------------------------------------------------------------------------------------
 */
 
+params.snpeff_db = getGenomeAttribute('snpeff_db')
+
 /*
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
     IMPORT FUNCTIONS / MODULES / SUBWORKFLOWS / WORKFLOWS
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 */
 
-include { DOWNLOADSNPEFFCACHE  } from './workflows/downloadsnpeffcache'
+include { DOWNLOADSNPEFFCACHE     } from './workflows/downloadsnpeffcache'
 include { PIPELINE_INITIALISATION } from './subworkflows/local/utils_nfcore_downloadsnpeffcache_pipeline'
 include { PIPELINE_COMPLETION     } from './subworkflows/local/utils_nfcore_downloadsnpeffcache_pipeline'
-include { getGenomeAttribute      } from './subworkflows/local/utils_nfcore_downloadsnpeffcache_pipeline'
-
-/*
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-    GENOME PARAMETER VALUES
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-*/
-
-// TODO nf-core: Remove this line if you don't need a FASTA file
-//   This is an example of how to use getGenomeAttribute() to fetch parameters
-//   from igenomes.config using `--genome`
-params.fasta = getGenomeAttribute('fasta')
+include { softwareVersionsToYAML  } from './subworkflows/nf-core/utils_nfcore_pipeline'
 
 /*
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -39,21 +30,23 @@ params.fasta = getGenomeAttribute('fasta')
 // WORKFLOW: Run main analysis pipeline depending on type of input
 //
 workflow ANNOTATIONCACHE_DOWNLOADSNPEFFCACHE {
-
     take:
-    samplesheet // channel: samplesheet read in from --input
+    id // channel: samplesheet read in from --input
 
     main:
-
-    //
-    // WORKFLOW: Run pipeline
-    //
-    DOWNLOADSNPEFFCACHE (
-        samplesheet
+    DOWNLOADSNPEFFCACHE(
+        Channel.of(
+            [
+                [id: "${id}"],
+                params.snpeff_db,
+            ]
+        )
     )
+
     emit:
-    multiqc_report = DOWNLOADSNPEFFCACHE.out.multiqc_report // channel: /path/to/multiqc_report.html
+    versions = DOWNLOADSNPEFFCACHE.out.versions // channel: [ versions.yml ]
 }
+
 /*
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
     RUN MAIN WORKFLOW
@@ -61,42 +54,51 @@ workflow ANNOTATIONCACHE_DOWNLOADSNPEFFCACHE {
 */
 
 workflow {
-
-    main:
     //
     // SUBWORKFLOW: Run initialisation tasks
     //
-    PIPELINE_INITIALISATION (
+    PIPELINE_INITIALISATION(
         params.version,
         params.validate_params,
-        params.monochrome_logs,
         args,
         params.outdir,
-        params.input
     )
 
     //
     // WORKFLOW: Run main workflow
     //
-    ANNOTATIONCACHE_DOWNLOADSNPEFFCACHE (
-        PIPELINE_INITIALISATION.out.samplesheet
-    )
+    ANNOTATIONCACHE_DOWNLOADSNPEFFCACHE("${params.snpeff_db}")
+
+    softwareVersionsToYAML(ANNOTATIONCACHE_DOWNLOADSNPEFFCACHE.out.versions).collectFile(storeDir: "${params.outdir}/pipeline_info", name: 'downloadsnpeffcache_software_versions.yml', sort: true, newLine: true)
+
     //
     // SUBWORKFLOW: Run completion tasks
     //
-    PIPELINE_COMPLETION (
+    PIPELINE_COMPLETION(
         params.email,
         params.email_on_fail,
         params.plaintext_email,
         params.outdir,
         params.monochrome_logs,
         params.hook_url,
-        ANNOTATIONCACHE_DOWNLOADSNPEFFCACHE.out.multiqc_report
     )
 }
 
 /*
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-    THE END
+    FUNCTIONS
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 */
+
+//
+// Get attribute from genome config file e.g. fasta
+//
+
+def getGenomeAttribute(attribute) {
+    if (params.genomes && params.genome && params.genomes.containsKey(params.genome)) {
+        if (params.genomes[params.genome].containsKey(attribute)) {
+            return params.genomes[params.genome][attribute]
+        }
+    }
+    return null
+}
