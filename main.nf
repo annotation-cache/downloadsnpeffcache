@@ -7,71 +7,105 @@
 ----------------------------------------------------------------------------------------
 */
 
-nextflow.enable.dsl = 2
-
 /*
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-    REFERENCE GENOME
+    IMPORT FUNCTIONS / MODULES / SUBWORKFLOWS / WORKFLOWS
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 */
 
-params.snpeff_db     = WorkflowMain.getGenomeAttribute(params, 'snpeff_db')
-params.snpeff_genome = WorkflowMain.getGenomeAttribute(params, 'snpeff_genome')
+include { SNPEFF_DOWNLOAD         } from './modules/nf-core/snpeff/download'
+include { PIPELINE_INITIALISATION } from './subworkflows/local/utils_nfcore_downloadsnpeffcache_pipeline'
+include { PIPELINE_COMPLETION     } from './subworkflows/local/utils_nfcore_downloadsnpeffcache_pipeline'
+include { getGenomeAttribute      } from 'plugin/nf-core-utils'
+include { softwareVersionsToYAML  } from 'plugin/nf-core-utils'
 
 /*
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-    VALIDATE & PRINT PARAMETER SUMMARY
+    GENOME PARAMETER VALUES
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 */
 
-include { INITIALISE } from './subworkflows/nf-core/initialise/main'
+params.snpeff_db = getGenomeAttribute('snpeff_db')
 
 /*
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-    NAMED WORKFLOW FOR PIPELINE
+    RUN MAIN WORKFLOW
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 */
 
-include { DOWNLOADSNPEFFCACHE } from './workflows/downloadsnpeffcache'
+workflow {
+
+    main:
+    // SUBWORKFLOW: Run initialisation tasks
+    PIPELINE_INITIALISATION(
+        params.version,
+        params.validate_params,
+        args,
+        params.outdir,
+        params.genome,
+        params.help,
+        params.help_full,
+        params.show_hidden,
+    )
+
+    // WORKFLOW: Run main workflow
+    ANNOTATIONCACHE_DOWNLOADSNPEFFCACHE(params.snpeff_db)
+
+    softwareVersionsToYAML(
+        softwareVersions: channel.topic("versions"),
+        nextflowVersion: workflow.nextflow.version,
+    ).collectFile(
+        storeDir: "${params.outdir}/pipeline_info",
+        name: 'downloadsnpeffcache_software_versions.yml',
+        sort: true,
+        newLine: true,
+    )
+
+    // SUBWORKFLOW: Run completion tasks
+    PIPELINE_COMPLETION(
+        params.email,
+        params.email_on_fail,
+        params.plaintext_email,
+        params.outdir,
+        params.monochrome_logs,
+        params.hook_url,
+    )
+
+    publish:
+    cache = ANNOTATIONCACHE_DOWNLOADSNPEFFCACHE.out.cache.map { meta, file ->
+        [meta + [path: meta.id], file]
+    }
+}
+
+output {
+    cache {
+        path { meta, path -> path >> meta.path }
+    }
+}
+
+/*
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    NAMED WORKFLOWS FOR PIPELINE
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+*/
 
 //
-// WORKFLOW: Run main annotation-cache/downloadsnpeffcache analysis pipeline
+// WORKFLOW: Run main analysis pipeline depending on type of input
 //
 workflow ANNOTATIONCACHE_DOWNLOADSNPEFFCACHE {
-    INITIALISE ( params.version, params.help, [] )
+    take:
+    snpeff_db
 
-    DOWNLOADSNPEFFCACHE ( Channel.of([ [ id:"${params.snpeff_genome}.${params.snpeff_db}" ], params.snpeff_genome, params.snpeff_db ]) )
+    main:
+    SNPEFF_DOWNLOAD(
+        channel.of(
+            [
+                [id: "${snpeff_db}"],
+                snpeff_db,
+            ]
+        )
+    )
 
+    emit:
+    cache = SNPEFF_DOWNLOAD.out.cache.collect() // channel: [ meta, cache ]
 }
-
-/*
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-    RUN ALL WORKFLOWS
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-*/
-
-//
-// WORKFLOW: Execute a single named workflow for the pipeline
-// See: https://github.com/nf-core/rnaseq/issues/619
-//
-workflow {
-    ANNOTATIONCACHE_DOWNLOADSNPEFFCACHE ()
-}
-
-// COMPLETION EMAIL AND SUMMARY
-workflow.onComplete {
-    if (params.email || params.email_on_fail) {
-        NfcoreTemplate.email(workflow, params, summary_params, projectDir, log, multiqc_report)
-    }
-    NfcoreTemplate.dump_parameters(workflow, params)
-    NfcoreTemplate.summary(workflow, params, log)
-    if (params.hook_url) {
-        NfcoreTemplate.IM_notification(workflow, params, summary_params, projectDir, log)
-    }
-}
-
-/*
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-    THE END
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-*/

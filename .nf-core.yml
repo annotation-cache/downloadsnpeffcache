@@ -26,7 +26,15 @@ lint:
     - manifest.homePage
     - params.input
   schema_lint: false
+nf_core_version: 3.3.2
 repository_type: pipeline
 template:
-  prefix: annotation-cache
-  skip: []
+  author: Maxime U Garcia
+  description: Download SnpEff cache for annotation-cache
+  force: false
+  is_nfcore: false
+  name: downloadsnpeffcache
+  org: annotation-cache
+  outdir: .
+  skip_features: []
+  version: "105"
