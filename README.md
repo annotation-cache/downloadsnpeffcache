@@ -1,9 +1,13 @@
+# annotation-cache/downloadsnpeffcache
+
+[![Open in GitHub Codespaces](https://img.shields.io/badge/Open_In_GitHub_Codespaces-black?labelColor=grey&logo=github)](https://github.com/codespaces/new/annotation-cache/downloadsnpeffcache)
 [![GitHub Actions CI Status](https://github.com/annotation-cache/downloadsnpeffcache/actions/workflows/nf-test.yml/badge.svg)](https://github.com/annotation-cache/downloadsnpeffcache/actions/workflows/nf-test.yml)
-[![GitHub Actions Linting Status](https://github.com/annotation-cache/downloadsnpeffcache/actions/workflows/linting.yml/badge.svg)](https://github.com/annotation-cache/downloadsnpeffcache/actions/workflows/linting.yml)[![Cite with Zenodo](http://img.shields.io/badge/DOI-10.5281/zenodo.8392944-1073c8?labelColor=000000)](https://doi.org/10.5281/zenodo.8392944)
+[![GitHub Actions Linting Status](https://github.com/annotation-cache/downloadsnpeffcache/actions/workflows/linting.yml/badge.svg)](https://github.com/annotation-cache/downloadsnpeffcache/actions/workflows/linting.yml)
+[![Cite with Zenodo](http://img.shields.io/badge/DOI-10.5281/zenodo.8392944-1073c8?labelColor=000000)](https://doi.org/10.5281/zenodo.8392944)
 [![nf-test](https://img.shields.io/badge/unit_tests-nf--test-337ab7.svg)](https://www.nf-test.com)
 
-[![Nextflow](https://img.shields.io/badge/version-%E2%89%A524.10.5-green?style=flat&logo=nextflow&logoColor=white&color=%230DC09D&link=https%3A%2F%2Fnextflow.io)](https://www.nextflow.io/)
-[![nf-core template version](https://img.shields.io/badge/nf--core_template-3.3.2-green?style=flat&logo=nfcore&logoColor=white&color=%2324B064&link=https%3A%2F%2Fnf-co.re)](https://github.com/nf-core/tools/releases/tag/3.3.2)
+[![Nextflow](https://img.shields.io/badge/version-%E2%89%A525.10.2-green?style=flat&logo=nextflow&logoColor=white&color=%230DC09D&link=https%3A%2F%2Fnextflow.io)](https://www.nextflow.io/)
+[![nf-core template version](https://img.shields.io/badge/nf--core_template-3.5.1-green?style=flat&logo=nfcore&logoColor=white&color=%2324B064&link=https%3A%2F%2Fnf-co.re)](https://github.com/nf-core/tools/releases/tag/3.5.1)
 [![run with conda](http://img.shields.io/badge/run%20with-conda-3EB049?labelColor=000000&logo=anaconda)](https://docs.conda.io/en/latest/)
 [![run with docker](https://img.shields.io/badge/run%20with-docker-0db7ed?labelColor=000000&logo=docker)](https://www.docker.com/)
 [![run with singularity](https://img.shields.io/badge/run%20with-singularity-1d355c.svg?labelColor=000000)](https://sylabs.io/docs/)
@@ -11,20 +15,19 @@
 
 ## Introduction
 
-**annotation-cache/downloadsnpeffcache** is a bioinformatics pipeline to download SnpEff cache.
+**annotation-cache/downloadsnpeffcache** is a bioinformatics pipeline to download snpEff cache.
 
 ## Usage
 
 > [!NOTE]
 > If you are new to Nextflow and nf-core, please refer to [this page](https://nf-co.re/docs/usage/installation) on how to set-up Nextflow. Make sure to [test your setup](https://nf-co.re/docs/usage/introduction#how-to-run-a-pipeline) with `-profile test` before running the workflow on actual data.
 
-First, choose the genome you want to download the SnpEff cache for. You can find the list of the current available genomes in the shared [genomes.config](https://github.com/annotation-cache/configs/blob/main/genomes.config) file.
+First, choose the genome you want to download the snpEff cache for. You can find the list of the current available genomes in the shared [genomes.config](https://github.com/annotation-cache/configs/blob/main/genomes.config) file.
 
-Alternatively, you can use the following params to specify the genome and build version:
+Alternatively, you can use the following params to specify the genome, species and build version:
 
 ```yml
-snpeff_db: "105"
-snpeff_genome: "GRCh38"
+snpeff_db: "GRCh38.99"
 ```
 
 Now, you can run the pipeline using:
@@ -41,12 +44,12 @@ nextflow run annotation-cache/downloadsnpeffcache \
 
 ## Credits
 
-annotation-cache/downloadsnpeffcache was originally written by Maxime U Garcia.
+annotation-cache/downloadsnpeffcache was originally written by [Maxime U Garcia](https://github.com/maxulysse).
 
-We thank the following people for their extensive assistance in the development of this pipeline:
+We thank the following people for their extensive assistance in the development of this pipeline/ressource:
 
-- @adamrtalbot
-- @FriederikeHanssen
+- [Adam Talbot](https://github.com/adamrtalbot)
+- [Friederike Hanssen](https://github.com/FriederikeHanssen)
 
 ## Contributions and Support
 
@@ -54,7 +57,7 @@ If you would like to contribute to this pipeline, please see the [contributing g
 
 ## Citations
 
-If you use annotation-cache/downloadsnpeffcache for your analysis, please cite it using the following doi: [10.5281/zenodo.8392944](https://doi.org/10.5281/zenodo.8392944)
+If you use annotation-cache/downloadsnpeffcache for your analysis, please cite it using the following doi: [10.5281/zenodo.8392946](https://doi.org/10.5281/zenodo.8392946)
 
 An extensive list of references for the tools used by the pipeline can be found in the [`CITATIONS.md`](CITATIONS.md) file.
 
