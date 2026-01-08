@@ -1,4 +1,4 @@
-name: SNPEFF_DOWNLOAD
+name: snpeff_download
 description: Genetic variant annotation and functional effect prediction toolbox
 keywords:
   - annotation
@@ -14,28 +14,51 @@ tools:
       homepage: https://pcingola.github.io/SnpEff/
       documentation: https://pcingola.github.io/SnpEff/se_introduction/
       licence: ["MIT"]
+      identifier: biotools:snpeff
 input:
-  - meta:
-      type: map
-      description: |
-        Groovy Map containing sample information
-        e.g. [ id:'test', single_end:false ]
-  - vcf:
-      type: file
-      description: |
-        vcf to annotate
-  - db:
-      type: string
-      description: |
-        which db to annotate with
+  - - meta:
+        type: map
+        description: |
+          Groovy Map containing sample information
+          e.g. [ id:'test', single_end:false ]
+    - snpeff_db:
+        type: string
+        description: SnpEff database name
+        ontologies: []
 output:
-  - cache:
-      type: file
-      description: |
-        snpEff cache
-  - versions:
-      type: file
-      description: File containing software versions
-      pattern: "versions.yml"
+  cache:
+    - - meta:
+          type: file
+          description: |
+            snpEff cache
+          ontologies: []
+      - snpeff_cache:
+          type: file
+          description: |
+            snpEff cache
+          ontologies: []
+  versions_snpeff:
+    - - ${task.process}:
+          type: string
+          description: The process the versions were collected from
+      - snpeff:
+          type: string
+          description: The tool name
+      - "snpEff -version 2>&1 | cut -f 2 -d '\t'":
+          type: string
+          description: The command used to generate the version of the tool
+topics:
+  versions:
+    - - ${task.process}:
+          type: string
+          description: The process the versions were collected from
+      - snpeff:
+          type: string
+          description: The tool name
+      - "snpEff -version 2>&1 | cut -f 2 -d '\t'":
+          type: string
+          description: The command used to generate the version of the tool
 authors:
+  - "@maxulysse"
+maintainers:
   - "@maxulysse"

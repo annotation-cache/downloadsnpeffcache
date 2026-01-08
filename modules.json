@@ -7,28 +7,8 @@
                 "nf-core": {
                     "snpeff/download": {
                         "branch": "master",
-                        "git_sha": "4d584d5cf6ed5f7363a51cdb4b3eb25398e9e537",
-                        "installed_by": ["modules"],
-                        "patch": "modules/nf-core/snpeff/download/snpeff-download.diff"
-                    }
-                }
-            },
-            "subworkflows": {
-                "nf-core": {
-                    "utils_nextflow_pipeline": {
-                        "branch": "master",
-                        "git_sha": "c2b22d85f30a706a3073387f30380704fcae013b",
-                        "installed_by": ["subworkflows"]
-                    },
-                    "utils_nfcore_pipeline": {
-                        "branch": "master",
-                        "git_sha": "51ae5406a030d4da1e49e4dab49756844fdd6c7a",
-                        "installed_by": ["subworkflows"]
-                    },
-                    "utils_nfschema_plugin": {
-                        "branch": "master",
-                        "git_sha": "2fd2cd6d0e7b273747f32e465fdc6bcc3ae0814e",
-                        "installed_by": ["subworkflows"]
+                        "git_sha": "ab50ae0a7c0714bf8b13918c1b7af732002c244d",
+                        "installed_by": ["modules"]
                     }
                 }
             }

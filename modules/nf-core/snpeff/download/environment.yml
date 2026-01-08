@@ -4,4 +4,5 @@ channels:
   - conda-forge
   - bioconda
 dependencies:
-  - bioconda::multiqc=1.29
+  # renovate: datasource=conda depName=bioconda/snpeff
+  - bioconda::snpeff=5.4.0a

@@ -1,0 +1,30 @@
+{
+    "-profile test": {
+        "content": [
+            1,
+            {
+                "SNPEFF_DOWNLOAD": {
+                    "snpeff": "5.4a"
+                },
+                "Workflow": {
+                    "annotation-cache/downloadsnpeffcache": "v105"
+                }
+            },
+            [
+                "WBcel235.99",
+                "WBcel235.99/WBcel235.99",
+                "WBcel235.99/WBcel235.99/snpEffectPredictor.bin",
+                "pipeline_info",
+                "pipeline_info/downloadsnpeffcache_software_versions.yml"
+            ],
+            [
+                "snpEffectPredictor.bin:md5,07eca39b2a3176a0292d11d6256c216d"
+            ]
+        ],
+        "meta": {
+            "nf-test": "0.9.3",
+            "nextflow": "25.10.2"
+        },
+        "timestamp": "2026-01-08T13:06:53.663887764"
+    }
+}

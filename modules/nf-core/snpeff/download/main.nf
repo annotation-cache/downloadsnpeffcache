@@ -2,17 +2,17 @@ process SNPEFF_DOWNLOAD {
     tag "${meta.id}"
     label 'process_medium'
 
-    conda "bioconda::snpeff=5.3.0a"
+    conda "${moduleDir}/environment.yml"
     container "${workflow.containerEngine == 'singularity' && !task.ext.singularity_pull_docker_container
-        ? 'https://depot.galaxyproject.org/singularity/snpeff:5.1--hdfd78af_2'
-        : 'community.wave.seqera.io/library/snpeff:5.3.0a--ca8e0b08f227a463'}"
+        ? 'https://community-cr-prod.seqera.io/docker/registry/v2/blobs/sha256/30/30669e5208952f30d59d0d559928772f082830d01a140a853fff13a2283a17b0/data'
+        : 'community.wave.seqera.io/library/snpeff:5.4.0a--eaf6ce30125b2b17'}"
 
     input:
-    tuple val(meta), val(genome)
+    tuple val(meta), val(snpeff_db)
 
     output:
-    tuple val(meta), path(prefix), emit: cache
-    path "versions.yml", emit: versions
+    tuple val(meta), path('snpeff_cache'), emit: cache
+    tuple val("${task.process}"), val('snpeff'), eval("snpEff -version 2>&1 | cut -f 2 -d '\t'"), topic: versions, emit: versions_snpeff
 
     when:
     task.ext.when == null || task.ext.when
@@ -26,28 +26,19 @@ process SNPEFF_DOWNLOAD {
     else {
         avail_mem = (task.memory.mega * 0.8).intValue()
     }
-    prefix = task.ext.prefix ?: 'snpeff_cache'
     """
     snpEff \\
         -Xmx${avail_mem}M \\
-        download ${genome} \\
-        -dataDir \${PWD}/${prefix} \\
+        download ${snpeff_db} \\
+        -dataDir \${PWD}/snpeff_cache \\
         ${args}
-
-
-    cat <<-END_VERSIONS > versions.yml
-    "${task.process}":
-        snpeff: \$(echo \$(snpEff -version 2>&1) | cut -f 2 -d ' ')
-    END_VERSIONS
     """
 
     stub:
     """
-    mkdir ${genome}
+    mkdir -p snpeff_cache/${snpeff_db}
 
-    cat <<-END_VERSIONS > versions.yml
-    "${task.process}":
-        snpeff: \$(echo \$(snpEff -version 2>&1) | cut -f 2 -d ' ')
-    END_VERSIONS
+    touch snpeff_cache/${snpeff_db}/sequence.I.bin
+    touch snpeff_cache/${snpeff_db}/sequence.bin
     """
 }
