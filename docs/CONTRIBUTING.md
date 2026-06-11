@@ -27,7 +27,10 @@ To contribute code to any nf-core pipeline:
 - [ ] Update relevant documentation within the `docs/` folder, use nf-core/tools to update `nextflow_schema.json`, and update `CITATIONS.md`.
 - [ ] Run and/or update tests. See [Testing](#testing) for more information.
 - [ ] [Lint](#lint-tests) your code with nf-core/tools.
-- [ ] Submit a pull request (PR) against the `dev` branch and request a review.
+- [ ] Submit a pull request (PR) against the `main` branch and request a review.
+
+> [!NOTE]
+> Unlike most nf-core pipelines, this pipeline works directly on `main` without a `dev` branch. All pull requests should target `main` directly.
 
 If you are not used to this workflow with Git, see the [GitHub documentation](https://help.github.com/en/github/collaborating-with-issues-and-pull-requests) or [Git resources](https://try.github.io/) for more information.
 
@@ -86,9 +89,9 @@ These tests are run with the latest available version of Nextflow and the minimu
 > [!WARNING]
 > Only in the unlikely event of a release that contains a critical bug.
 
-- [ ] Create a new branch `patch` on your fork based on `upstream/main` or `upstream/master`.
+- [ ] Create a new branch `patch` on your fork based on `upstream/main`.
 - [ ] Fix the bug and use nf-core/tools to bump the version to the next semantic version, for example, `1.2.3` → `1.2.4`.
-- [ ] Open a Pull Request from `patch` directly to `main`/`master` with the changes.
+- [ ] Open a Pull Request from `patch` directly to `main` with the changes.
 
 ### Pipeline contribution conventions
 
@@ -110,9 +113,6 @@ Please also refer to the [pipeline-specific contribution guidelines](#pipeline-s
 - [ ] Update `usage.md`, `output.md`, and `citation.md` as appropriate.
 - [ ] [Lint](lint) the code with nf-core/tools.
 - [ ] Update any diagrams or pipeline images as necessary.
-- [ ] Update MultiQC config `assets/multiqc_config.yml` so relevant suffixes, file name cleanup, and module plots are in the appropriate order.
-- [ ] If applicable, create a [MultiQC](https://seqera.io/multiqc/) module.
-- [ ] Add a description of the output files and, if relevant, images from the MultiQC report to `docs/output.md`.
 
 To update the minimum required Nextflow version, see the [Nextflow version bumping](#nextflow-version-bumping) section below. For more information about pipeline contributions, see [pipeline-specific contribution guidelines](#pipeline-specific-contribution-guidelines).
 
@@ -162,4 +162,5 @@ If you update images or graphics, follow the nf-core [style guidelines](https://
 
 ## Pipeline specific contribution guidelines
 
-<!-- TODO nf-core: Add any pipeline specific contribution guidelines here, such as coding styles, procedures, checklists etc. -->
+Unlike nf-core pipelines, this pipeline works directly on `main` without a `dev` branch.
+All pull requests should target `main` directly.
