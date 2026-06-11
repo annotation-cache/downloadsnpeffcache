@@ -48,8 +48,14 @@ workflow {
         params.show_hidden,
     )
 
-    // WORKFLOW: Run main workflow
-    ANNOTATIONCACHE_DOWNLOADSNPEFFCACHE(params.snpeff_db)
+    SNPEFF_DOWNLOAD(
+        channel.of(
+            [
+                [id: "${params.snpeff_db}"],
+                params.snpeff_db,
+            ]
+        )
+    )
 
     softwareVersionsToYAML(
         softwareVersions: channel.topic("versions"),
@@ -68,44 +74,14 @@ workflow {
         params.plaintext_email,
         params.outdir,
         params.monochrome_logs,
-        params.hook_url,
     )
 
     publish:
-    cache = ANNOTATIONCACHE_DOWNLOADSNPEFFCACHE.out.cache.map { meta, file ->
-        [meta + [path: meta.id], file]
-    }
+    cache = SNPEFF_DOWNLOAD.out.cache.map { meta, file -> [meta + [path: meta.id], file] }
 }
 
 output {
     cache {
         path { meta, path -> path >> meta.path }
     }
-}
-
-/*
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-    NAMED WORKFLOWS FOR PIPELINE
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-*/
-
-//
-// WORKFLOW: Run main analysis pipeline depending on type of input
-//
-workflow ANNOTATIONCACHE_DOWNLOADSNPEFFCACHE {
-    take:
-    snpeff_db
-
-    main:
-    SNPEFF_DOWNLOAD(
-        channel.of(
-            [
-                [id: "${snpeff_db}"],
-                snpeff_db,
-            ]
-        )
-    )
-
-    emit:
-    cache = SNPEFF_DOWNLOAD.out.cache.collect() // channel: [ meta, cache ]
 }

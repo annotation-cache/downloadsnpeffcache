@@ -4,7 +4,7 @@
             1,
             {
                 "SNPEFF_DOWNLOAD": {
-                    "snpeff": "5.4a"
+                    "snpeff": "5.4c"
                 }
             },
             [
@@ -18,10 +18,10 @@
                 "snpEffectPredictor.bin:md5,07eca39b2a3176a0292d11d6256c216d"
             ]
         ],
+        "timestamp": "2026-06-11T11:14:40.779789696",
         "meta": {
-            "nf-test": "0.9.3",
-            "nextflow": "25.10.2"
-        },
-        "timestamp": "2026-01-08T13:16:30.685870692"
+            "nf-test": "0.9.5",
+            "nextflow": "26.04.3"
+        }
     }
 }
