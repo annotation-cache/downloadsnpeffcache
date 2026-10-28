@@ -15,6 +15,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - [#12](https://github.com/annotation-cache/downloadsnpeffcache/pull/12) - Restored pipeline version `99`, reverted to `105` by the template update
 
+### Removed
+
+- [#13](https://github.com/annotation-cache/downloadsnpeffcache/pull/13) - Removed orphan `utils_nfcore_pipeline` tests (subworkflow not used)
+
 ## [99](https://github.com/annotation-cache/downloadsnpeffcache/releases/tag/99) - Cerulean Caleçon
 
 - [#4](https://github.com/annotation-cache/downloadsnpeffcache/pull/4) - Back to dev
