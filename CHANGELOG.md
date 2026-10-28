@@ -9,10 +9,15 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - [#11](https://github.com/annotation-cache/downloadsnpeffcache/pull/11) - Template update for nf-core/tools version 4.0.2
 - [#12](https://github.com/annotation-cache/downloadsnpeffcache/pull/12) - Switched to PRs directly to `main` (no `dev` branch)
+- [#13](https://github.com/annotation-cache/downloadsnpeffcache/pull/13) - Template update for nf-core/tools version 4.2.1
 
 ### Fixed
 
 - [#12](https://github.com/annotation-cache/downloadsnpeffcache/pull/12) - Restored pipeline version `99`, reverted to `105` by the template update
+
+### Removed
+
+- [#13](https://github.com/annotation-cache/downloadsnpeffcache/pull/13) - Removed orphan `utils_nfcore_pipeline` tests (subworkflow not used)
 
 ## [99](https://github.com/annotation-cache/downloadsnpeffcache/releases/tag/99) - Cerulean Caleçon
 
