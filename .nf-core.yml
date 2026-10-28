@@ -40,4 +40,4 @@ template:
     - igenomes
     - multiqc
     - seqera_platform
-  version: "105"
+  version: "99"

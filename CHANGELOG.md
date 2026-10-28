@@ -3,17 +3,22 @@
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/)
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [Unreleased](https://github.com/annotation-cache/downloadsnpeffcache/compare/99...HEAD)
+
+### Changed
+
+- [#11](https://github.com/annotation-cache/downloadsnpeffcache/pull/11) - Template update for nf-core/tools version 4.0.2
+- [#12](https://github.com/annotation-cache/downloadsnpeffcache/pull/12) - Switched to PRs directly to `main` (no `dev` branch)
+
+### Fixed
+
+- [#12](https://github.com/annotation-cache/downloadsnpeffcache/pull/12) - Restored pipeline version `99`, reverted to `105` by the template update
+
 ## [99](https://github.com/annotation-cache/downloadsnpeffcache/releases/tag/99) - Cerulean Caleçon
 
 - [#4](https://github.com/annotation-cache/downloadsnpeffcache/pull/4) - Back to dev
 - [#6](https://github.com/annotation-cache/downloadsnpeffcache/pull/6) - Template update for nf-core/tools version 3.3.2
 - [#7](https://github.com/annotation-cache/downloadsnpeffcache/pull/7) - Template update for nf-core/tools version 3.5.1
-
-### `Added`
-
-### `Fixed`
-
-### `Dependencies`
 
 ### `Deprecated`
 
