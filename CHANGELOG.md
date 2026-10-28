@@ -9,6 +9,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - [#11](https://github.com/annotation-cache/downloadsnpeffcache/pull/11) - Template update for nf-core/tools version 4.0.2
 - [#12](https://github.com/annotation-cache/downloadsnpeffcache/pull/12) - Switched to PRs directly to `main` (no `dev` branch)
+- [#13](https://github.com/annotation-cache/downloadsnpeffcache/pull/13) - Template update for nf-core/tools version 4.2.1
 
 ### Fixed
 
